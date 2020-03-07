@@ -28,4 +28,9 @@
         android:typeface="normal"
         android:visibility="visible" />
 
+    <com.example.cpstest.BallView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ballViewGyro"/>
+
 </RelativeLayout>

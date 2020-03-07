@@ -8,4 +8,24 @@
     android:background="@drawable/app_back_ground"
     >
 
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="232dp"
+        android:layout_height="126dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="93dp"
+        android:layout_marginRight="79dp"
+        android:layout_marginBottom="402dp"
+        android:fontFamily="casual"
+        android:lineSpacingExtra="8sp"
+        android:text="Super Spinner Bros"
+        android:textAllCaps="true"
+        android:textColor="#E7F3E9"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible" />
+    
 </RelativeLayout>
