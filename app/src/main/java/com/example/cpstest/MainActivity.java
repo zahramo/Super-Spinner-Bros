@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 Intent gyroscopeActivity = new Intent(getBaseContext(), GyroscopeActivity.class);
+                gyroscopeActivity = setInputDatas(gyroscopeActivity);
                 startActivity(gyroscopeActivity);
             }
         });
