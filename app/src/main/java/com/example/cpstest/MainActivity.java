@@ -30,8 +30,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private EditText ball2X;
     private EditText ball1Y;
     private EditText ball2Y;
-    private EditText ball1Speed;
-    private EditText ball2Speed;
+    private EditText ball1Vx;
+    private EditText ball1Vy;
+    private EditText ball2Vx;
+    private EditText ball2Vy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +45,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         ball1X = (EditText) findViewById(R.id.ball1X);
         ball1Y = (EditText) findViewById(R.id.ball1Y);
-        ball1Speed = (EditText) findViewById(R.id.ball1Speed);
+        ball1Vx = (EditText) findViewById(R.id.ball1Vx);
+        ball1Vy = (EditText) findViewById(R.id.ball1Vy);
         ball2X = (EditText) findViewById(R.id.ball2X);
         ball2Y = (EditText) findViewById(R.id.ball2Y);
-        ball2Speed = (EditText) findViewById(R.id.ball2Speed);
+        ball2Vx = (EditText) findViewById(R.id.ball2Vx);
+        ball2Vy = (EditText) findViewById(R.id.ball2Vy);
 
 
         gravityBtn.setOnClickListener(new View.OnClickListener(){
@@ -99,12 +103,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Intent setInputDatas(Intent intent){
         intent.putExtra("ball1X", ball1X.getText().toString());
-        intent.putExtra("ball2X", ball2X.getText().toString());
         intent.putExtra("ball1Y", ball1Y.getText().toString());
+        intent.putExtra("ball1Vx", ball1Vx.getText().toString());
+        intent.putExtra("ball1Vy", ball1Vy.getText().toString());
 
+        intent.putExtra("ball2X", ball2X.getText().toString());
         intent.putExtra("ball2Y", ball2Y.getText().toString());
-        intent.putExtra("ball1Speed", ball1Speed.getText().toString());
-        intent.putExtra("ball2Speed", ball2Speed.getText().toString());
+        intent.putExtra("ball2Vx", ball2Vx.getText().toString());
+        intent.putExtra("ball2Vy", ball2Vy.getText().toString());
         return intent;
     }
 }

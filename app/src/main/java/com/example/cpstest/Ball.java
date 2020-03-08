@@ -9,19 +9,24 @@ public class Ball {
     private float y0;
     private float x;
     private float y;
-    private float v0;
-    private float v;
-    private float a;
+    private float vx0;
+    private float vy0;
+    private float vx;
+    private float vy;
+    private float ax;
+    private float ay;
     private float m;
 
-    public Ball(float x0,float y0, float v0, float m){
+    public Ball(float x0,float y0, float vx0, float vy0, float m){
         this.x0 = x0;
         this.y0 = y0;
-        this.v0 = v0;
+        this.vx0 = vx0;
+        this.vy0 = vy0;
 
         this.x = this.x0;
         this.y = this.y0;
-        this.v = this.v0;
+        this.vx = this.vx0;
+        this.vy = this.vy0;
 
         this.m = m;
     }
