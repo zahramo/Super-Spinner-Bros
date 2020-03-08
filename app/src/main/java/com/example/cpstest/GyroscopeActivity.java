@@ -33,25 +33,27 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gyroscope);
         setBallsData();
-        ball1 = new Ball(ball1X, ball1Y);
-        ball2 = new Ball(ball2X, ball2Y);
+        ball1 = new Ball(ball1X, ball1Y, ball1Speed, 10);
+        ball2 = new Ball(ball2X, ball2Y, ball2Speed, 50);
+        ball1.setView(findViewById(R.id.ballViewGyro));
+        ball2.setView(findViewById(R.id.ball2ViewGyro));
+
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
 
-        ball1View = findViewById(R.id.ballViewGyro);
-        ball2View = findViewById(R.id.ball2ViewGyro);
-
-        ball1View.setOnClickListener(new View.OnClickListener() {
+        ball1.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("Start","Start of the game!");
                 start = true;
-                ball1 = new Ball(0, 0);
+                ball1.setX(ball1.getX()+100);
+                ball1.setY(ball1.getY()+100);
+                ball1.moveTo(ball1.getX(), ball1.getY());
             }
         });
-        drawBall(ball1,ball1View);
-        drawBall(ball2,ball2View);
+        ball1.draw();
+        ball2.draw();
     }
 
     @Override
@@ -82,14 +84,5 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         System.out.println(ball2Speed);
     }
 
-    private void drawBall(Ball ball, BallView ballView){
-        Timer myTimer = new Timer();
-        myTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ballView.render(ball.getX(), ball.getY());
-            }
-        }, 0, 17); // TODO: 3/7/2020 : check the period of timer is proper or not.
-    }
 
 }
