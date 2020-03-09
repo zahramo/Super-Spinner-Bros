@@ -1,12 +1,19 @@
 package com.example.cpstest;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GravityActivity extends AppCompatActivity {
+import java.sql.SQLOutput;
+
+public class GravityActivity extends AppCompatActivity implements SensorEventListener {
+    SensorManager sensorManager;
     private int ball1X;
     private int ball2X;
     private int ball1Y;
@@ -20,6 +27,9 @@ public class GravityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gravity);
         setBallsData();
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void setBallsData(){
@@ -40,5 +50,16 @@ public class GravityActivity extends AppCompatActivity {
         System.out.println(ball2Vx);
         ball2Vy = Integer.parseInt(getIntent().getStringExtra("ball2Vy"));
         System.out.println(ball2Vy);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
