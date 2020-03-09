@@ -47,21 +47,32 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         ball1.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Start","Start of the game!");
                 start = true;
-                ball1.setX(ball1.getX()+100);
-                ball1.setY(ball1.getY()+100);
-                ball1.moveTo(ball1.getX(), ball1.getY());
             }
         });
-        ball1.draw();
-        ball2.draw();
+        ball2.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start = true;
+            }
+        });
+
+        Timer myTimer = new Timer();
+        myTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (start) {
+                    ball1.draw();
+                    ball2.draw();
+                }
+            }
+        }, 0, 17);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(start) {
-            ball1.moveTo(event.values[0], event.values[1]);
+//            ball1.moveTo(event.values[0] * 10, event.values[1] * 10);
         }
     }
 
@@ -72,21 +83,21 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
 
     private void setBallsData(){
         ball1X = Integer.parseInt(getIntent().getStringExtra("ball1X"));
-        System.out.println(ball1X);
+        System.out.println("ball1X :  " + ball1X);
         ball1Y = Integer.parseInt(getIntent().getStringExtra("ball1Y"));
-        System.out.println(ball1Y);
+        System.out.println("ball1Y :  " + ball1Y);
         ball1Vx = Integer.parseInt(getIntent().getStringExtra("ball1Vx"));
-        System.out.println(ball1Vx);
+        System.out.println("ball1Vx :  " + ball1Vx);
         ball1Vy = Integer.parseInt(getIntent().getStringExtra("ball1Vy"));
-        System.out.println(ball1Vy);
+        System.out.println("ball1Vy :  " + ball1Vy);
 
         ball2X = Integer.parseInt(getIntent().getStringExtra("ball2X"));
-        System.out.println(ball2X);
+        System.out.println("ball2X :  " + ball2X);
         ball2Y = Integer.parseInt(getIntent().getStringExtra("ball2Y"));
-        System.out.println(ball2Y);
+        System.out.println("ball2Y :  " + ball2Y);
         ball2Vx = Integer.parseInt(getIntent().getStringExtra("ball2Vx"));
-        System.out.println(ball2Vx);
+        System.out.println("ball2Vx :  " + ball2Vx);
         ball2Vy = Integer.parseInt(getIntent().getStringExtra("ball2Vy"));
-        System.out.println(ball2Vy);
+        System.out.println("ball2Vy :  " + ball2Vy);
     }
 }

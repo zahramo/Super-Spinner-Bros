@@ -31,11 +31,9 @@ public class Ball {
         this.m = m;
     }
 
-    //This is a test function and can be deleted or be replaced
-    //Usage : in GyroscopeActivity.java in onSensorChanged function.
-    public void moveTo(float x, float y){
-        this.x = x;
-        this.y = y;
+    public void move() {
+        this.x += this.vx;
+        this.y += this.vy;
     }
 
     public float getX() {
@@ -54,13 +52,8 @@ public class Ball {
     }
 
     public void draw(){
-        Timer myTimer = new Timer();
-        myTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                view.render(x, y);
-            }
-        }, 0, 17); // TODO: 3/7/2020 : check the period of timer is proper or not.
+        move();
+        view.render(x, y);
     }
 
     public void setX(float x) {
