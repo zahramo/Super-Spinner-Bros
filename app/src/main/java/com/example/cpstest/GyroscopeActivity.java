@@ -27,9 +27,6 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
     private Ball ball2;
     private boolean start = false;
 
-    BallView ball1View;
-    BallView ball2View;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

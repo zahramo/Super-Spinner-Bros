@@ -17,6 +17,8 @@ public class Ball {
     private float ay;
     private float m;
 
+    private float r;
+
     public Ball(float x0,float y0, float vx0, float vy0, float m){
         this.x0 = x0;
         this.y0 = y0;
@@ -29,6 +31,7 @@ public class Ball {
         this.vy = this.vy0;
 
         this.m = m;
+        this.r = 80;
     }
 
     public void move() {
@@ -56,12 +59,48 @@ public class Ball {
         view.render(x, y);
     }
 
+    public boolean isOkToMove(int scWidth, int scHeight){
+        if(x+r+vx > scWidth/2) return false;
+        if(x-r+vx < -1*scWidth/2) return false;
+        if(y+r+vy > scHeight/2) return false;
+        if(y-r+vy < -1*scHeight/2) return false;
+        return true;
+    }
+
+    public void configMove(int scWidth, int scHeight){
+
+            if(x+r == scWidth/2 || x-r == -scWidth/2){
+                vx = -vx;
+                System.out.println(1);
+            }else if(x+r+vx > scWidth/2){
+                x -= x+r+vx - scWidth/2;
+            } else if(x-r+vx < -1*scWidth/2){
+                x += -scWidth/2 - (x-r+vx);
+            }
+            if(y+r == scHeight/2 || y-r == -scHeight/2){
+                vy= -vy;
+            }
+            else if(y+r+vy > scHeight/2){
+                y -= y+r+vy - scHeight/2;
+            } else if(y-r+vy < -1*scHeight/2) {
+                y += -scHeight / 2 - (y - r + vy);
+            }
+    }
+
     public void setX(float x) {
         this.x = x;
     }
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public float getR() {
+        return r;
+    }
+
+    public void setR(float r) {
+        this.r = r;
     }
 }
 
