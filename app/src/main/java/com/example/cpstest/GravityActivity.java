@@ -16,6 +16,7 @@ package com.example.cpstest;
         import androidx.appcompat.app.AppCompatActivity;
 
         import java.sql.SQLOutput;
+        import java.util.Objects;
         import java.util.Timer;
         import java.util.TimerTask;
 
@@ -49,73 +50,53 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+
         ball1 = new Ball(ball1X, ball1Y, ball1Vx, ball1Vy, Config.FIRST_BALL_MASS, width, height);
         ball2 = new Ball(ball2X, ball2Y, ball2Vx, ball2Vy, Config.SECOND_BALL_MASS, width, height);
         ball1.setView(findViewById(R.id.ball1ViewGravity));
         ball2.setView(findViewById(R.id.ball2ViewGravity));
 
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        sensorManager.registerListener((SensorEventListener) this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
-
-        ball1.draw();
-        ball2.draw();
-
-        ball1.getView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start = true;
-            }
-        });
-        ball2.getView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start = true;
-            }
-        });
+        ball1.getView().render(ball1X,ball1Y);
+        ball2.getView().render(ball2X,ball2Y);
+        System.out.println(ball1.getX() + "_" + ball1.getY());
+        ball1.getView().setOnClickListener(view -> start = true);
+        ball2.getView().setOnClickListener(view -> start = true);
 
         Timer myTimer = new Timer();
         myTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (start) {
+                    System.out.println("start:" + ball1.getX() + "_" + ball1.getY());
                     checkCollision();
                     ball1.draw();
                     ball2.draw();
                 }
             }
-        }, 0, 17);
+        }, 0, 15);
     }
 
     private void setBallsData(){
-        ball1X = Integer.parseInt(getIntent().getStringExtra("ball1X"));
+        ball1X = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1X")));
         System.out.println(ball1X);
-        ball1Y = Integer.parseInt(getIntent().getStringExtra("ball1Y"));
+        ball1Y = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Y")));
         System.out.println(ball1Y);
-        ball1Vx = Integer.parseInt(getIntent().getStringExtra("ball1Vx"));
+        ball1Vx = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Vx")));
         System.out.println(ball1Vx);
-        ball1Vy = Integer.parseInt(getIntent().getStringExtra("ball1Vy"));
+        ball1Vy = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Vy")));
         System.out.println(ball1Vy);
 
-        ball2X = Integer.parseInt(getIntent().getStringExtra("ball2X"));
+        ball2X = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2X")));
         System.out.println(ball2X);
-        ball2Y = Integer.parseInt(getIntent().getStringExtra("ball2Y"));
+        ball2Y = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Y")));
         System.out.println(ball2Y);
-        ball2Vx = Integer.parseInt(getIntent().getStringExtra("ball2Vx"));
+        ball2Vx = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Vx")));
         System.out.println(ball2Vx);
-        ball2Vy = Integer.parseInt(getIntent().getStringExtra("ball2Vy"));
+        ball2Vy = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Vy")));
         System.out.println(ball2Vy);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-//        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     private void checkCollision() { //don't touch this function please :)
@@ -198,6 +179,17 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
                 distance = (float) Math.sqrt(dis1 + dis2);
             }
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
+        ball1.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+        ball2.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 }

@@ -7,12 +7,8 @@ import java.util.TimerTask;
 
 public class Ball {
     private BallView view;
-    private float x0;
-    private float y0;
     private float x;
     private float y;
-    private float vx0;
-    private float vy0;
     private float vx;
     private float vy;
     private float ax;
@@ -22,86 +18,130 @@ public class Ball {
     private float displayHeight;
     private float r;
 
-    public Ball(float x0,float y0, float vx0, float vy0, float m, int width, int height){
-        this.x0 = x0;
-        this.y0 = y0;
-        this.vx0 = vx0;
-        this.vy0 = vy0;
+    private long t0;
+    private long t;
 
-        this.x = this.x0;
-        this.y = this.y0;
-        this.vx = this.vx0;
-        this.vy = this.vy0;
+    Ball(float x0, float y0, float vx0, float vy0, float m, int width, int height){
+        this.x = x0;
+        this.y = y0;
+        this.vx = vx0;
+        this.vy = vy0;
+        this.ax = 0;
+        this.ay = 0;
         this.r = (float) (Config.BALL_SIZE/2);
         this.m = m;
         setDisplaySize(width, height);
+        t0 = System.currentTimeMillis();
     }
 
-    public void setDisplaySize(int width, int height)
+    private void setDisplaySize(int width, int height)
     {
         this.displayWidth = width;
         this.displayHeight = height;
     }
 
-    public void move() {
-        if (this.x + this.vx > displayWidth/2 - Config.BALL_SIZE/2 || this.x + this.vx < -displayWidth/2 + Config.BALL_SIZE/2)
-            this.vx = -this.vx;
-        if (this.y + this.vy > displayHeight/2 - Config.BALL_SIZE/2 || this.y + this.vy < -displayHeight/2 + Config.BALL_SIZE/2)
-            this.vy = -this.vy;
+    private void move() {
+        t = System.currentTimeMillis();
+        float deltaT = (float) (t-t0) / 1000;
 
-        this.x += this.vx;
-        this.y += this.vy;
+        if (this.x + this.vx > displayWidth/2 - Config.BALL_SIZE/2 ||
+                this.x + this.vx < -displayWidth/2 + Config.BALL_SIZE/2) {
+            ax = 0;
+            vx = 0;
+        }
+        if (this.y + this.vy > displayHeight/2 - Config.BALL_SIZE/2 ||
+                this.y + this.vy < -displayHeight/2 + Config.BALL_SIZE/2) {
+            ay = 0;
+            vy = 0;
+        }
+//
+        x += (float) 0.5*ax*deltaT*deltaT + vx*deltaT;
+        vx += ax*deltaT;
+        y += (float) 0.5*ay*deltaT*deltaT + vy*deltaT;
+        vy += ay*deltaT;
+        t0 = t;
     }
 
-    public float getX() {
+    float getX() {
         return x;
     }
-    public float getY() {
+    float getY() {
         return y;
     }
 
-    public float getVx() {
+    float getVx() {
         return vx;
     }
-    public float getVy() {
+    float getVy() {
         return vy;
     }
 
-    public BallView getView() {
+    BallView getView() {
         return view;
     }
 
-    public void setView(BallView view) {
+    void setView(BallView view) {
         this.view = view;
     }
 
-    public void draw(){
+    void draw(){
         move();
         view.render(x, y);
     }
 
-    public void setX(float x) {
+    void setX(float x) {
         this.x = x;
     }
-
-    public void setY(float y) {
+    void setY(float y) {
         this.y = y;
     }
 
-    public void setVx(float vx) {
+    void setVx(float vx) {
         this.vx = vx;
     }
-
-    public void setVy(float vy) {
+    void setVy(float vy) {
         this.vy = vy;
     }
 
     public float getR() {
         return r;
     }
-
     public void setR(float r) {
         this.r = r;
+    }
+
+    void gravityUpdate(float gx, float gy, float gz){
+        t = System.currentTimeMillis();
+        float deltaT = (float) (t-t0) / 1000;
+
+        gx = -gx;
+        float Fn = gz * m * Config.METER;
+        float Fx = gx * m * Config.METER;
+        float Fy = gy * m * Config.METER;
+
+        System.out.println("GX:"+gx+" GY:"+gy+" GZ:"+gz);
+
+        float Fs = Fn * Config.COF_S;
+        if(Math.abs(Fs) < Math.abs(Fx)){
+            float Fk = (Fx > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
+            ax = (Fx + Fk)/m;
+            x += (float) 0.5*ax*deltaT*deltaT + vx*deltaT;
+            vx += ax*deltaT;
+
+            System.out.println("x "+ x + " vx: " + vx + " ax: " + ax);
+//            System.out.println("y: "+ y + " vy: " + vy + " ay: " + ay);
+        }else{
+            vx = 0;
+        }
+        if(Math.abs(Fs) < Math.abs(Fy)){
+            float Fk = (Fy > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
+            ay = (Fy + Fk)/m;
+            y += (float) 0.5*ay*deltaT*deltaT + vy*deltaT;
+            vy += ay*deltaT;
+        }else{
+            vy = 0;
+        }
+        t0 = t;
     }
 }
 
