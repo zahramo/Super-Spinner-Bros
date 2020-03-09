@@ -119,16 +119,10 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
     private void setScreenSize(){
         WindowManager wm = getWindowManager();
         Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        screenWidth = size.x;
-//        screenHeight = size.y;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         display.getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
-
-        System.out.println("sc w:" + screenWidth);
-        System.out.println("sc h:" + screenHeight);
     }
 }

@@ -5,8 +5,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +26,9 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
     private int ball2Vx;
     private int ball2Vy;
 
+    private int screenWidth;
+    private int screenHeight;
+
     private Ball ball1;
     private Ball ball2;
     private boolean start = false;
@@ -32,6 +38,8 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gyroscope);
         setBallsData();
+        setScreenSize();
+
         ball1 = new Ball(ball1X, ball1Y, ball1Vx, ball1Vy, Config.FIRST_BALL_MASS);
         ball2 = new Ball(ball2X, ball2Y, ball2Vx, ball2Vy, Config.SECOND_BALL_MASS);
         ball1.setView(findViewById(R.id.ballViewGyro));
@@ -59,7 +67,9 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
             @Override
             public void run() {
                 if (start) {
+                    ball1.configMove(screenWidth,screenHeight);
                     ball1.draw();
+                    ball2.configMove(screenWidth,screenHeight);
                     ball2.draw();
                 }
             }
@@ -96,5 +106,21 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         System.out.println("ball2Vx :  " + ball2Vx);
         ball2Vy = Integer.parseInt(getIntent().getStringExtra("ball2Vy"));
         System.out.println("ball2Vy :  " + ball2Vy);
+    }
+
+    private void setScreenSize(){
+        WindowManager wm = getWindowManager();
+        Display display = wm.getDefaultDisplay();
+//        Point size = new Point();
+//        screenWidth = size.x;
+//        screenHeight = size.y;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        screenHeight = displayMetrics.heightPixels;
+        screenWidth = displayMetrics.widthPixels;
+
+        System.out.println("sc w:" + screenWidth);
+        System.out.println("sc h:" + screenHeight);
     }
 }

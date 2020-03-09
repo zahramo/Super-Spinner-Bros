@@ -59,13 +59,6 @@ public class Ball {
         view.render(x, y);
     }
 
-    public boolean isOkToMove(int scWidth, int scHeight){
-        if(x+r+vx > scWidth/2) return false;
-        if(x-r+vx < -1*scWidth/2) return false;
-        if(y+r+vy > scHeight/2) return false;
-        if(y-r+vy < -1*scHeight/2) return false;
-        return true;
-    }
 
     public void configMove(int scWidth, int scHeight){
 
