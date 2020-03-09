@@ -57,8 +57,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 Intent gravityActivity = new Intent(getBaseContext(), GravityActivity.class);
-                gravityActivity = setInputDatas(gravityActivity);
-                startActivity(gravityActivity);
+                if (ball1Vx.getText().toString().equals("") || ball1Vy.getText().toString().equals("") || ball1X.getText().toString().equals("") || ball2Y.getText().toString().equals("") || ball2Vx.getText().toString().equals("") || ball2Vy.getText().toString().equals("") || ball2X.getText().toString().equals("") || ball2Y.getText().toString().equals("") )
+                {
+                    ((TextView)findViewById(R.id.error)).setText("Incorrect Inputs"); }
+                else{
+                    gravityActivity = setInputDatas(gravityActivity);
+                    startActivity(gravityActivity);}
             }
         });
 
@@ -66,8 +70,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 Intent gyroscopeActivity = new Intent(getBaseContext(), GyroscopeActivity.class);
-                gyroscopeActivity = setInputDatas(gyroscopeActivity);
-                startActivity(gyroscopeActivity);
+                if (ball1Vx.getText().toString().equals("") || ball1Vy.getText().toString().equals("") || ball1X.getText().toString().equals("") || ball2Y.getText().toString().equals("") || ball2Vx.getText().toString().equals("") || ball2Vy.getText().toString().equals("") || ball2X.getText().toString().equals("") || ball2Y.getText().toString().equals("") )
+                {
+                    ((TextView)findViewById(R.id.error)).setText("Incorrect Inputs"); }
+                else{
+                    gyroscopeActivity = setInputDatas(gyroscopeActivity);
+                    startActivity(gyroscopeActivity);
+                }
             }
         });
 

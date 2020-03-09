@@ -20,6 +20,7 @@ public class Ball {
     private float m;
     private float displayWidth;
     private float displayHeight;
+    private float r;
 
     public Ball(float x0,float y0, float vx0, float vy0, float m, int width, int height){
         this.x0 = x0;
@@ -31,7 +32,7 @@ public class Ball {
         this.y = this.y0;
         this.vx = this.vx0;
         this.vy = this.vy0;
-
+        this.r = (float) (Config.BALL_SIZE/2);
         this.m = m;
         setDisplaySize(width, height);
     }
@@ -60,7 +61,7 @@ public class Ball {
     }
 
     public float getVx() {
-        return vy;
+        return vx;
     }
     public float getVy() {
         return vy;
@@ -93,6 +94,14 @@ public class Ball {
 
     public void setVy(float vy) {
         this.vy = vy;
+    }
+
+    public float getR() {
+        return r;
+    }
+
+    public void setR(float r) {
+        this.r = r;
     }
 }
 
