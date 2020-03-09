@@ -7,9 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,28 +24,35 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
     private int ball2Vx;
     private int ball2Vy;
 
-    private int screenWidth;
-    private int screenHeight;
-
     private Ball ball1;
     private Ball ball2;
     private boolean start = false;
+
+    BallView ball1View;
+    BallView ball2View;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gyroscope);
         setBallsData();
-        setScreenSize();
 
-        ball1 = new Ball(ball1X, ball1Y, ball1Vx, ball1Vy, Config.FIRST_BALL_MASS);
-        ball2 = new Ball(ball2X, ball2Y, ball2Vx, ball2Vy, Config.SECOND_BALL_MASS);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        ball1 = new Ball(ball1X, ball1Y, ball1Vx, ball1Vy, Config.FIRST_BALL_MASS, width, height);
+        ball2 = new Ball(ball2X, ball2Y, ball2Vx, ball2Vy, Config.SECOND_BALL_MASS, width, height);
         ball1.setView(findViewById(R.id.ballViewGyro));
         ball2.setView(findViewById(R.id.ball2ViewGyro));
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+        ball1.draw();
+        ball2.draw();
 
         ball1.getView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,9 +72,8 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
             @Override
             public void run() {
                 if (start) {
-                    ball1.configMove(screenWidth,screenHeight);
+                    checkCollision();
                     ball1.draw();
-                    ball2.configMove(screenWidth,screenHeight);
                     ball2.draw();
                 }
             }
@@ -108,19 +112,87 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         System.out.println("ball2Vy :  " + ball2Vy);
     }
 
-    private void setScreenSize(){
-        WindowManager wm = getWindowManager();
-        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        screenWidth = size.x;
-//        screenHeight = size.y;
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
-        screenHeight = displayMetrics.heightPixels;
-        screenWidth = displayMetrics.widthPixels;
+    private void checkCollision() { //don't touch this function please :)
+        float x1 = ball1.getX();
+        float y1 = ball1.getY();
+        float vx1 = ball1.getVx();
+        float vy1 = ball1.getVy();
+        float x2 = ball2.getX();
+        float y2 = ball2.getY();
+        float vx2 = ball2.getVx();
+        float vy2 = ball2.getVy();
+        float m1 = Config.FIRST_BALL_MASS;
+        float m2 = Config.SECOND_BALL_MASS;
+        float dis1 = (float) Math.pow((x1) - (x2), 2);
+        float dis2 = (float) Math.pow((y1) - (y2), 2);
+        float distance = (float) Math.sqrt(dis1 + dis2);
 
-        System.out.println("sc w:" + screenWidth);
-        System.out.println("sc h:" + screenHeight);
+        if (distance <= Config.BALL_SIZE) {
+            System.out.println("vx1:  "+ vx1 + "vy1:  "+ vy1);
+            System.out.println("vx2:  "+ vx2 + "vy2:  "+ vy2);
+            float nx = (x2 - x1);
+            float ny = (y2 - y1);
+
+            nx = (float) (nx / Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)));
+            ny = (float) (ny / Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)));
+
+
+            float tx = -ny;
+            float ty = nx;
+            float v1n = nx * vx1 +  ny * vy1;
+            float v2n = nx * vx2 + ny * vy2;
+
+            float v1pt = tx * vx1 + ty * vy1;
+            float v2pt = tx * vx2 + ty * vy2;
+
+            float v1pn = (v1n*(m1 - m2) + 2*m2*v2n) / (m1 + m2);
+            float v2pn = (v2n*(m2 - m1) + 2*m1*v1n) / (m1 + m2);
+
+            System.out.println("nx: "+ nx);
+            System.out.println("ny: "+ ny);
+            System.out.println("tx: "+ tx);
+            System.out.println("ty: "+ ty);
+
+            float v1pnx = v1pn * nx;
+            float v1pny = v1pn * ny;
+            float v2pnx = v2pn * nx;
+            float v2pny = v2pn * ny;
+
+            float v1ptx = v1pt * tx;
+            float v1pty = v1pt * ty;
+            float v2ptx = v2pt * tx;
+            float v2pty = v2pt * ty;
+
+            float newVx1 = v1ptx + v1pnx;
+            float newVy1 = v1pty + v1pny;
+            float newVx2 = v2ptx + v2pnx;
+            float newVy2 = v2pty + v2pny;
+
+
+
+            ball1.setVx(newVx1);
+            ball1.setVy(newVy1);
+            ball2.setVx(newVx2);
+            ball2.setVy(newVy2);
+
+            dis1 = (float) Math.pow((x1 + newVx1) - (x2 + newVx2), 2);
+            dis2 = (float) Math.pow((y1 + newVy1) - (y2 + newVy2), 2);
+            distance = (float) Math.sqrt(dis1 + dis2);
+            while (distance <= Config.BALL_SIZE) {
+                x1 = ball1.getX();
+                y1 = ball1.getY();
+                x2 = ball2.getX();
+                y2 = ball2.getY();
+                ball1.setX(x1 + newVx1);
+                ball1.setY(y1 + newVy1);
+                ball2.setX(x2 + newVx2);
+                ball2.setY(y2 + newVy2);
+                dis1 = (float) Math.pow((x1 + newVx1) - (x2 + newVx2), 2);
+                dis2 = (float) Math.pow((y1 + newVy1) - (y2 + newVy2), 2);
+                distance = (float) Math.sqrt(dis1 + dis2);
+            }
+        }
+
     }
 }
