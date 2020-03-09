@@ -1,5 +1,7 @@
 package com.example.cpstest;
 
+import android.util.DisplayMetrics;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,8 +18,11 @@ public class Ball {
     private float ax;
     private float ay;
     private float m;
+    private float displayWidth;
+    private float displayHeight;
+    private float r;
 
-    public Ball(float x0,float y0, float vx0, float vy0, float m){
+    public Ball(float x0,float y0, float vx0, float vy0, float m, int width, int height){
         this.x0 = x0;
         this.y0 = y0;
         this.vx0 = vx0;
@@ -27,11 +32,23 @@ public class Ball {
         this.y = this.y0;
         this.vx = this.vx0;
         this.vy = this.vy0;
-
+        this.r = (float) (Config.BALL_SIZE/2);
         this.m = m;
+        setDisplaySize(width, height);
+    }
+
+    public void setDisplaySize(int width, int height)
+    {
+        this.displayWidth = width;
+        this.displayHeight = height;
     }
 
     public void move() {
+        if (this.x + this.vx > displayWidth/2 - Config.BALL_SIZE/2 || this.x + this.vx < -displayWidth/2 + Config.BALL_SIZE/2)
+            this.vx = -this.vx;
+        if (this.y + this.vy > displayHeight/2 - Config.BALL_SIZE/2 || this.y + this.vy < -displayHeight/2 + Config.BALL_SIZE/2)
+            this.vy = -this.vy;
+
         this.x += this.vx;
         this.y += this.vy;
     }
@@ -41,6 +58,13 @@ public class Ball {
     }
     public float getY() {
         return y;
+    }
+
+    public float getVx() {
+        return vx;
+    }
+    public float getVy() {
+        return vy;
     }
 
     public BallView getView() {
@@ -62,6 +86,22 @@ public class Ball {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public void setVx(float vx) {
+        this.vx = vx;
+    }
+
+    public void setVy(float vy) {
+        this.vy = vy;
+    }
+
+    public float getR() {
+        return r;
+    }
+
+    public void setR(float r) {
+        this.r = r;
     }
 }
 

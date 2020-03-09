@@ -8,4 +8,13 @@
     android:background="@drawable/app_back_ground"
     >
 
+    <com.example.cpstest.BallView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ball1ViewGravity"/>
+
+    <com.example.cpstest.BallView
+        android:id="@+id/ball2ViewGravity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
