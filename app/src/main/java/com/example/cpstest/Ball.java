@@ -18,12 +18,12 @@ public class Ball {
     private float displayHeight;
     private float r;
 
-    private long t0;
-    private long t;
-
     private float xAngle;
     private float yAngle;
     private float zAngle;
+
+    private long t0;
+    private long t;
 
     Ball(float x0, float y0, float vx0, float vy0, float m, int width, int height){
         this.x = x0;
@@ -35,9 +35,6 @@ public class Ball {
         this.r = (float) (Config.BALL_SIZE/2);
         this.m = m;
         setDisplaySize(width, height);
-        xAngle = 0;
-        yAngle = 0;
-        zAngle = 0;
         //this.t0 = System.currentTimeMillis();
     }
 
@@ -58,19 +55,18 @@ public class Ball {
         float deltaX = (float) 0.5*ax*deltaT*deltaT + vx*deltaT;
         float deltaY = (float) 0.5*ay*deltaT*deltaT + vy*deltaT;
 
-        //System.out.println("delta x = "+ deltaX + "delta y = " + deltaY + "delta t = " + deltaT );
+
 
         if (this.x + deltaX > displayWidth/2 - r ||
                 this.x + deltaX < -displayWidth/2 + r) {
-          //  ax = -ax;
             vx = -vx;
         }else{
             x += deltaX;
             vx += ax*deltaT;
+//            System.out.println("vx: "+ vx + "  ax: "+ ax);
         }
         if (this.y + deltaY> displayHeight/2 - r ||
                 this.y + deltaY < -displayHeight/2 + r) {
-          //  ay = -ay;
             vy = -vy;
         }
         else{
@@ -78,8 +74,6 @@ public class Ball {
             vy += ay*deltaT;
         }
         t0 = t;
-
-        System.out.println("x = " + x + "y = " + y);
     }
 
     float getX() {
@@ -105,7 +99,6 @@ public class Ball {
     }
 
     void draw(){
-        //move();
         view.render(x, y);
     }
 
@@ -143,20 +136,14 @@ public class Ball {
         float Fkx = (Fx > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
         float Fky = (Fy > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
 
-        System.out.println("Fn = " + Fn + " Fx = " + Fx + " Fy = " + Fy + " Fs = " + Fs + " Fkx = " + Fkx + " Fky = " + Fky);
-        System.out.println("gz = " + gz + " gx = " + gx + " gy = " + gy);
-
         if(Math.abs(Fs) < Math.abs(Fx)){
             ax = (Fx + Fkx)/m;
+//            System.out.println(1);
 
-        }else{
-           // ax = 0;
-            vx = 0;
         }
         if(Math.abs(Fs) < Math.abs(Fy)){
             ay = (Fy + Fky)/m;
-        }else{
-            vy = 0;
+//            System.out.println(3);
         }
         t0 = t;
     }
@@ -183,6 +170,8 @@ public class Ball {
     }
 
 }
+
+
 
 
 
