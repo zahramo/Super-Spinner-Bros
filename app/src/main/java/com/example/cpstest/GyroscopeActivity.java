@@ -27,6 +27,7 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
     private Ball ball1;
     private Ball ball2;
     private boolean start = false;
+    private boolean running = false;
 
     BallView ball1View;
     BallView ball2View;
@@ -72,18 +73,26 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
             @Override
             public void run() {
                 if (start) {
+                    if(!running){
+                        ball1.setT0();
+                        ball2.setT0();
+                        running = true;
+                    }
+                    ball1.move();
+                    ball2.move();
                     checkCollision();
                     ball1.draw();
                     ball2.draw();
                 }
             }
-        }, 0, 17);
+        }, 0, 10);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(start) {
-//            ball1.moveTo(event.values[0] * 10, event.values[1] * 10);
+            ball1.handleGyroscope(event.values[0], event.values[1], event.values[2]);
+            ball2.handleGyroscope(event.values[0], event.values[1], event.values[2]);
         }
     }
 

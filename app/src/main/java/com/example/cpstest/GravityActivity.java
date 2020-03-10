@@ -178,9 +178,9 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
         System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
         if(start){
             //checkCollision();
-            ball1.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+            ball1.handleGravity(event.values[0], event.values[1], event.values[2]);
             //checkCollision();
-            ball2.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+            ball2.handleGravity(event.values[0], event.values[1], event.values[2]);
         }
     }
 
