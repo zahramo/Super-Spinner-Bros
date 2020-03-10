@@ -152,21 +152,25 @@ public class Ball {
         t = System.currentTimeMillis();
         float deltaT = (float) (t-t0) / 1000;
 
-        float delatathX = wx * deltaT;
-        float delatathY = wy * deltaT;
+        System.out.println("wx = " + wx + "wy = " + wy + "wz = " + wz);
+
+        float delatathX = wy * deltaT;
+        float delatathY = wx * deltaT;
         float delatathZ = wz * deltaT;
 
         xAngle += delatathX;
         yAngle += delatathY;
         zAngle += delatathZ;
 
-        float g = (float)9.8/(float)Math.cos(zAngle);
-
-        float gx = g * (float)Math.cos(xAngle);
-        float gy = g * (float)Math.cos(yAngle);
+        float g = (float) 9.8;
+        System.out.println("xAngle = " + xAngle + "yAngle = " + yAngle + "zAngle = " + zAngle);
+        float gx = g * (float)Math.sin(xAngle);
+        float gy = g * (float)Math.sin(yAngle);
         float gz = g * (float)Math.cos(zAngle);
 
-        handleGravity(gx, gy, gz);
+        System.out.println("gx = " + gx + "gy = " + gy + "gz = " + gz);
+
+        handleGravity(gx, -gy, gz);
     }
 
 }
