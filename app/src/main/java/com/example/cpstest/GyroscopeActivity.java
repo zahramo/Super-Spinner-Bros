@@ -94,22 +94,14 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
 
     private void setBallsData(){
         ball1X = Integer.parseInt(getIntent().getStringExtra("ball1X"));
-        System.out.println("ball1X :  " + ball1X);
         ball1Y = Integer.parseInt(getIntent().getStringExtra("ball1Y"));
-        System.out.println("ball1Y :  " + ball1Y);
         ball1Vx = Integer.parseInt(getIntent().getStringExtra("ball1Vx"));
-        System.out.println("ball1Vx :  " + ball1Vx);
         ball1Vy = Integer.parseInt(getIntent().getStringExtra("ball1Vy"));
-        System.out.println("ball1Vy :  " + ball1Vy);
 
         ball2X = Integer.parseInt(getIntent().getStringExtra("ball2X"));
-        System.out.println("ball2X :  " + ball2X);
         ball2Y = Integer.parseInt(getIntent().getStringExtra("ball2Y"));
-        System.out.println("ball2Y :  " + ball2Y);
         ball2Vx = Integer.parseInt(getIntent().getStringExtra("ball2Vx"));
-        System.out.println("ball2Vx :  " + ball2Vx);
         ball2Vy = Integer.parseInt(getIntent().getStringExtra("ball2Vy"));
-        System.out.println("ball2Vy :  " + ball2Vy);
     }
 
 
@@ -129,8 +121,6 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
         float distance = (float) Math.sqrt(dis1 + dis2);
 
         if (distance <= Config.BALL_SIZE) {
-            System.out.println("vx1:  "+ vx1 + "vy1:  "+ vy1);
-            System.out.println("vx2:  "+ vx2 + "vy2:  "+ vy2);
             float nx = (x2 - x1);
             float ny = (y2 - y1);
 
@@ -149,10 +139,6 @@ public class GyroscopeActivity extends AppCompatActivity implements SensorEventL
             float v1pn = (v1n*(m1 - m2) + 2*m2*v2n) / (m1 + m2);
             float v2pn = (v2n*(m2 - m1) + 2*m1*v1n) / (m1 + m2);
 
-            System.out.println("nx: "+ nx);
-            System.out.println("ny: "+ ny);
-            System.out.println("tx: "+ tx);
-            System.out.println("ty: "+ ty);
 
             float v1pnx = v1pn * nx;
             float v1pny = v1pn * ny;

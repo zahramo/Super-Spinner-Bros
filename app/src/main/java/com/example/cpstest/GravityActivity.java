@@ -35,6 +35,7 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
     private int screenHeight;
 
     private boolean start = false;
+    private boolean running = false;
 
     private Ball ball1;
     private Ball ball2;
@@ -61,7 +62,6 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
 
         ball1.getView().render(ball1X,ball1Y);
         ball2.getView().render(ball2X,ball2Y);
-        System.out.println(ball1.getX() + "_" + ball1.getY());
         ball1.getView().setOnClickListener(view -> start = true);
         ball2.getView().setOnClickListener(view -> start = true);
 
@@ -70,33 +70,31 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
             @Override
             public void run() {
                 if (start) {
-                    System.out.println("start:" + ball1.getX() + "_" + ball1.getY());
+                    if(!running){
+                        ball1.setT0();
+                        ball2.setT0();
+                        running = true;
+                    }
+                    ball1.move();
+                    ball2.move();
                     checkCollision();
                     ball1.draw();
                     ball2.draw();
                 }
             }
-        }, 0, 15);
+        }, 0, 10);
     }
 
     private void setBallsData(){
         ball1X = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1X")));
-        System.out.println(ball1X);
         ball1Y = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Y")));
-        System.out.println(ball1Y);
         ball1Vx = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Vx")));
-        System.out.println(ball1Vx);
         ball1Vy = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball1Vy")));
-        System.out.println(ball1Vy);
 
         ball2X = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2X")));
-        System.out.println(ball2X);
         ball2Y = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Y")));
-        System.out.println(ball2Y);
         ball2Vx = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Vx")));
-        System.out.println(ball2Vx);
         ball2Vy = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Vy")));
-        System.out.println(ball2Vy);
     }
 
     private void checkCollision() { //don't touch this function please :)
@@ -115,8 +113,6 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
         float distance = (float) Math.sqrt(dis1 + dis2);
 
         if (distance <= Config.BALL_SIZE) {
-            System.out.println("vx1:  "+ vx1 + "vy1:  "+ vy1);
-            System.out.println("vx2:  "+ vx2 + "vy2:  "+ vy2);
             float nx = (x2 - x1);
             float ny = (y2 - y1);
 
@@ -135,10 +131,6 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
             float v1pn = (v1n*(m1 - m2) + 2*m2*v2n) / (m1 + m2);
             float v2pn = (v2n*(m2 - m1) + 2*m1*v1n) / (m1 + m2);
 
-            System.out.println("nx: "+ nx);
-            System.out.println("ny: "+ ny);
-            System.out.println("tx: "+ tx);
-            System.out.println("ty: "+ ty);
 
             float v1pnx = v1pn * nx;
             float v1pny = v1pn * ny;
@@ -183,9 +175,13 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-//        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
-        ball1.gravityUpdate(event.values[0], event.values[1], event.values[2]);
-        ball2.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
+        if(start){
+            //checkCollision();
+            ball1.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+            //checkCollision();
+            ball2.gravityUpdate(event.values[0], event.values[1], event.values[2]);
+        }
     }
 
     @Override

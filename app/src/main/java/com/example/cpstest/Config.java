@@ -8,6 +8,6 @@ public class Config {
     public static float COF_S = (float) 0.15;
     public static float COF_K = (float) 0.1;
     public static float G = (float) 9.8;
-    public static float FIRST_BALL_MASS = 10;
-    public static float SECOND_BALL_MASS = 10;
+    public static float FIRST_BALL_MASS = (float)0.01;
+    public static float SECOND_BALL_MASS = (float)0.05;
 }
