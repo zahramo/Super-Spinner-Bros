@@ -170,7 +170,7 @@ public class Ball {
 
         System.out.println("gx = " + gx + "gy = " + gy + "gz = " + gz);
 
-        handleGravity(gx, -gy, gz);
+        handleGravity(-gx, gy, gz);
     }
 
 }
