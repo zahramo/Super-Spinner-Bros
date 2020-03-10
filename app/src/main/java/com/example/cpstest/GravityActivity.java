@@ -82,7 +82,7 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
                     ball2.draw();
                 }
             }
-        }, 0, 10);
+        }, 0, 1);
     }
 
     private void setBallsData(){
@@ -97,7 +97,7 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
         ball2Vy = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("ball2Vy")));
     }
 
-    private void checkCollision() { //don't touch this function please :)
+    private void checkCollision() {
         float x1 = ball1.getX();
         float y1 = ball1.getY();
         float vx1 = ball1.getVx();
@@ -154,20 +154,22 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
             ball2.setVx(newVx2);
             ball2.setVy(newVy2);
 
-            dis1 = (float) Math.pow((x1 + newVx1) - (x2 + newVx2), 2);
-            dis2 = (float) Math.pow((y1 + newVy1) - (y2 + newVy2), 2);
+            int base = 1000;
+
+            dis1 = (float) Math.pow((x1 + newVx1 / base) - (x2 + newVx2 / base), 2);
+            dis2 = (float) Math.pow((y1 + newVy1 / base) - (y2 + newVy2 / base), 2);
             distance = (float) Math.sqrt(dis1 + dis2);
             while (distance <= Config.BALL_SIZE) {
                 x1 = ball1.getX();
                 y1 = ball1.getY();
                 x2 = ball2.getX();
                 y2 = ball2.getY();
-                ball1.setX(x1 + newVx1);
-                ball1.setY(y1 + newVy1);
-                ball2.setX(x2 + newVx2);
-                ball2.setY(y2 + newVy2);
-                dis1 = (float) Math.pow((x1 + newVx1) - (x2 + newVx2), 2);
-                dis2 = (float) Math.pow((y1 + newVy1) - (y2 + newVy2), 2);
+                ball1.setX(x1 + newVx1 / base);
+                ball1.setY(y1 + newVy1 / base);
+                ball2.setX(x2 + newVx2 / base);
+                ball2.setY(y2 + newVy2 / base);
+                dis1 = (float) Math.pow((x1 + newVx1 / base) - (x2 + newVx2 / base), 2);
+                dis2 = (float) Math.pow((y1 + newVy1 / base) - (y2 + newVy2 / base), 2);
                 distance = (float) Math.sqrt(dis1 + dis2);
             }
         }
@@ -175,7 +177,7 @@ public class GravityActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
+//        System.out.println("x:" + event.values[0]+" Y:" + event.values[1] + " z:" + event.values[2]);
         if(start){
             //checkCollision();
             ball1.gravityUpdate(event.values[0], event.values[1], event.values[2]);

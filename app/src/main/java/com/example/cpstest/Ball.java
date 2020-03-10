@@ -45,27 +45,24 @@ public class Ball {
     }
 
     public void move() {
-        System.out.println("in move function");
 
         t = System.currentTimeMillis();
         float deltaT = (float) (t-t0) / 1000;
         float deltaX = (float) 0.5*ax*deltaT*deltaT + vx*deltaT;
         float deltaY = (float) 0.5*ay*deltaT*deltaT + vy*deltaT;
 
-        //System.out.println("delta x = "+ deltaX + "delta y = " + deltaY + "delta t = " + deltaT );
-        System.out.println("delta y = " + deltaY + ", ay = " + ay + ", vy = " + vy );
+
 
         if (this.x + deltaX > displayWidth/2 - r ||
                 this.x + deltaX < -displayWidth/2 + r) {
-          //  ax = -ax;
             vx = -vx;
         }else{
             x += deltaX;
             vx += ax*deltaT;
+//            System.out.println("vx: "+ vx + "  ax: "+ ax);
         }
         if (this.y + deltaY> displayHeight/2 - r ||
                 this.y + deltaY < -displayHeight/2 + r) {
-          //  ay = -ay;
             vy = -vy;
         }
         else{
@@ -73,8 +70,6 @@ public class Ball {
             vy += ay*deltaT;
         }
         t0 = t;
-
-        System.out.println("x = " + x + "y = " + y);
     }
 
     float getX() {
@@ -100,8 +95,6 @@ public class Ball {
     }
 
     void draw(){
-        System.out.println("in draw");
-        //move();
         view.render(x, y);
     }
 
@@ -139,27 +132,16 @@ public class Ball {
         float Fkx = (Fx > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
         float Fky = (Fy > 0) ? -Fn * Config.COF_K : Fn * Config.COF_K;
 
-        System.out.println("Fn = " + Fn + " Fx = " + Fx + " Fy = " + Fy + " Fs = " + Fs + " Fkx = " + Fkx + " Fky = " + Fky);
-        System.out.println("gn = " + gz + " gx = " + gx + " gy = " + gy);
-
         if(Math.abs(Fs) < Math.abs(Fx)){
             ax = (Fx + Fkx)/m;
-            System.out.println(1);
+//            System.out.println(1);
 
-        }else{
-           // ax = 0;
-            vx = 0;
-            System.out.println(2);
         }
         if(Math.abs(Fs) < Math.abs(Fy)){
             ay = (Fy + Fky)/m;
-            System.out.println(3);
-        }else{
-            vy = 0;
-            System.out.println(4);
+//            System.out.println(3);
         }
         t0 = t;
-        //move();
     }
 
 }
